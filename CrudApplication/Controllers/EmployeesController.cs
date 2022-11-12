@@ -20,7 +20,8 @@ namespace CrudApplication.Controllers
             _appDbContext = appDbContext;
         }
 
-      
+     
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
