@@ -20,8 +20,10 @@ namespace CrudApplication.Controllers
             _appDbContext = appDbContext;
         }
 
-
-     
+        public IActionResult Add()
+        {
+            return View();
+        }
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -29,12 +31,6 @@ namespace CrudApplication.Controllers
             var employee = await _appDbContext.employees.ToListAsync();
 
             return View(employee);
-        }
-
-
-        public IActionResult Add()
-        {
-            return View();
         }
 
         [HttpPost]
@@ -76,8 +72,6 @@ namespace CrudApplication.Controllers
   
         [HttpGet]
         public async Task<IActionResult> View(Guid Id)
-
-            //public async Task<IActionResult> View(Guid Id, UpdateEmployeeViewModel viewModel)
         {
 
             var employee = await _appDbContext.employees.FirstOrDefaultAsync(x => x.Id == Id);
@@ -107,8 +101,6 @@ namespace CrudApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> View( UpdateEmployeeViewModel model)
 
-            //public async Task<IActionResult> Update([FromBody] UpdateEmployeeViewModel model)
-
         {
             var employee = await _appDbContext.employees.FindAsync(model.Id);
 
@@ -135,6 +127,21 @@ namespace CrudApplication.Controllers
 
         }
 
+        public async Task<IActionResult> Delete(UpdateEmployeeViewModel model)
+        {
 
+            var employee = await _appDbContext.employees.FindAsync(model.Id);
+
+            if (employee != null)
+            {
+                _appDbContext.employees.Remove(employee);
+
+                await _appDbContext.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
