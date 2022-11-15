@@ -38,7 +38,6 @@ namespace CrudApplication.Controllers
         }
 
         [HttpPost]
-
         
         //[ValidateAntiForgeryToken]
         //[FromBody]
@@ -77,13 +76,15 @@ namespace CrudApplication.Controllers
   
         [HttpGet]
         public async Task<IActionResult> View(Guid Id)
+
+            //public async Task<IActionResult> View(Guid Id, UpdateEmployeeViewModel viewModel)
         {
 
             var employee = await _appDbContext.employees.FirstOrDefaultAsync(x => x.Id == Id);
 
             if (employee != null)
             {
-                var ViewModel = new UpdateEmployeeViewModel()
+                var viewModel = new UpdateEmployeeViewModel()
                 {
                     Id = employee.Id,
                     Name = employee.Name,
@@ -93,35 +94,45 @@ namespace CrudApplication.Controllers
                     Department = employee.Department,
                 };
 
-                return View(ViewModel);
+                //return View(viewModel);
+
+                return await Task.Run(() => View("View", viewModel ));
 
             }
-
+              
             return RedirectToAction("Index");
         }
 
 
-        [HttpPost]     
-        public async Task<IActionResult> Update([FromBody] UpdateEmployeeViewModel model)
+        [HttpPost]
+        public async Task<IActionResult> View( UpdateEmployeeViewModel model)
+
+            //public async Task<IActionResult> Update([FromBody] UpdateEmployeeViewModel model)
+
         {
             var employee = await _appDbContext.employees.FindAsync(model.Id);
 
-            employee.Name = model.Name;
+            if( employee != null)
+            {
 
-            employee.Email = model.Email;
+                employee.Name = model.Name;
 
-            employee.Salary = model.Salary;
+                employee.Email = model.Email;
 
-            employee.DateOfBirth = model.DateOfBirth;
+                employee.Salary = model.Salary;
 
-            employee.Department = model.Department;
+                employee.DateOfBirth = model.DateOfBirth;
 
-            await _appDbContext.SaveChangesAsync();
+                employee.Department = model.Department;
+
+                await _appDbContext.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+
+            }
 
             return RedirectToAction("Index");
 
-
-            // return RedirectToAction("Index");
         }
 
 
