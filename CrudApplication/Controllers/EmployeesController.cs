@@ -4,6 +4,8 @@ using CrudApplication.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.Xml;
 
 namespace CrudApplication.Controllers
 {
@@ -33,8 +35,7 @@ namespace CrudApplication.Controllers
             return View(employee);
         }
 
-        [HttpPost]
-        
+        [HttpPost]        
         //[ValidateAntiForgeryToken]
         //[FromBody]
         public async Task<IActionResult> NewAdd(AddEmployeeViewModel employeeViewModel)
@@ -47,7 +48,6 @@ namespace CrudApplication.Controllers
 
             var employee = new Employee()
             {
-
                 Id = Guid.NewGuid(),
 
                 Name = employeeViewModel.Name,
@@ -67,9 +67,9 @@ namespace CrudApplication.Controllers
             await _appDbContext.SaveChangesAsync();
 
             return RedirectToAction("Index");
-        }
+        }  
 
-  
+
         [HttpGet]
         public async Task<IActionResult> View(Guid Id)
         {
@@ -87,8 +87,6 @@ namespace CrudApplication.Controllers
                     DateOfBirth = employee.DateOfBirth,
                     Department = employee.Department,
                 };
-
-                //return View(viewModel);
 
                 return await Task.Run(() => View("View", viewModel ));
 

@@ -1,30 +1,45 @@
 using CrudApplication.Controllers;
 using CrudApplication.Data;
+using FakeItEasy;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
+using NUnit;
+using CrudApplication.Models;
 
 namespace UnitTests
 {
+
     public class EmployeesControllerTests
     {
-        EmployeesController employeesController;
+        public AddEmployeeViewModel _employeesController;
 
         [SetUp]
-        public void Setup()
-        {
-            employeesController = new EmployeesController();
-        }
+        //public void Setup()
+        //{
+        //    _employeesController = new EmployeesController();
+        //}
 
         [Test]
-        public void View_Works()
+        public void Index_Works()
         {
-            //Assert.Pass();
+
+            // Arrange
+
+            _employeesController = new AddEmployeeViewModel()
+            {
+
+                Name = "Daniel",
+                Email = "Danielikechukwu@gmail.com",
+                Salary = 2000000,
+                DateOfBirth = Convert.ToDateTime("11/10/20"),
+                Department = "HR",
+            };
+            
+
+            // Act
 
 
-            //Arrange
-
-            //Act
-
-            //Assert
+            // Assert
         }
     }
 }
