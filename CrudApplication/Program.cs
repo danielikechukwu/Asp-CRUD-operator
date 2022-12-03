@@ -1,4 +1,6 @@
 using CrudApplication.Data;
+using CrudApplication.Data.Repository;
+using CrudApplication.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +10,11 @@ builder.Services.AddControllersWithViews();
 
 //Configuring your CRUDAppDbContext.cs
 builder.Services.AddDbContext<CRUDAppDbContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("CRUDAppDatabase")));  
+options.UseSqlServer(builder.Configuration.GetConnectionString("CRUDAppDatabase")));
 
+builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+
+ 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

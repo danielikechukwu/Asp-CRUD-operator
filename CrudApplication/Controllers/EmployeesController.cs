@@ -1,4 +1,5 @@
 ﻿using CrudApplication.Data;
+using CrudApplication.Interface;
 using CrudApplication.Models;
 using CrudApplication.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace CrudApplication.Controllers
     public class EmployeesController : Controller
     {
 
-        //Injecting 
+        //Injecting
         private readonly CRUDAppDbContext _appDbContext;
 
         //Contructor Injection
@@ -22,11 +23,13 @@ namespace CrudApplication.Controllers
             _appDbContext = appDbContext;
         }
 
+        //Plain form to Add new user
         public IActionResult Add()
         {
             return View();
         }
 
+        //Displaying all data in table
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -34,7 +37,7 @@ namespace CrudApplication.Controllers
 
             return View(employee);
         }
-
+        //creating data
         [HttpPost]        
         //[ValidateAntiForgeryToken]
         //[FromBody]
@@ -48,6 +51,7 @@ namespace CrudApplication.Controllers
 
             var employee = new Employee()
             {
+
                 Id = Guid.NewGuid(),
 
                 Name = employeeViewModel.Name,
@@ -67,53 +71,114 @@ namespace CrudApplication.Controllers
             await _appDbContext.SaveChangesAsync();
 
             return RedirectToAction("Index");
-        }  
+        }
 
-
+        //Displaying single data
         [HttpGet]
-        public async Task<IActionResult> View(Guid Id)
+        public async Task<IActionResult> ViewAsync(Guid Id)
         {
-
+    
             var employee = await _appDbContext.employees.FirstOrDefaultAsync(x => x.Id == Id);
 
             if (employee != null)
             {
-                var viewModel = new UpdateEmployeeViewModel()
+                var viewModel = new ViewEmployeeViewModel()
                 {
+
                     Id = employee.Id,
                     Name = employee.Name,
                     Email = employee.Email,
                     Salary = employee.Salary,
                     DateOfBirth = employee.DateOfBirth,
                     Department = employee.Department,
+
                 };
 
-                return await Task.Run(() => View("View", viewModel ));
+                //return await Task.Run(() => View("View", viewModel ));
+                ///return RedirectToAction("Index");
+                
+
+                return View(viewModel);
 
             }
-              
+
             return RedirectToAction("Index");
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> View( UpdateEmployeeViewModel model)
+        //[HttpPost]
+        //public IActionResult Update()
 
+        //{
+        //    var employee = await _appDbContext.employees.FindAsync(model.Id);
+
+        //    if (employee != null)
+        //    {
+
+        //        employee.Name = model.Name;
+
+        //        employee.Email = model.Email;
+
+        //        employee.Salary = model.Salary;
+
+        //        employee.DateOfBirth = model.DateOfBirth;
+
+        //        employee.Department = model.Department;
+
+        //        await _appDbContext.SaveChangesAsync();
+
+        //        return RedirectToAction("Index");
+
+        //    }
+
+        //    return RedirectToAction("Index");
+
+        //}
+
+        public async Task<IActionResult> UpdateAsync(Guid Id)
         {
-            var employee = await _appDbContext.employees.FindAsync(model.Id);
 
-            if( employee != null)
+            var employee = await _appDbContext.employees.FirstOrDefaultAsync(x => x.Id == Id);
+
+            if (employee != null)
             {
 
-                employee.Name = model.Name;
+                var showEmployee = new UpdateEmployeeViewModel()
+                {
+                    Id = employee.Id,
+                    Name = employee.Name,
+                    Email = employee.Email,
+                    Salary = employee.Salary,
+                    DateOfBirth = employee.DateOfBirth,
+                    Department = employee.Department
+                };
 
-                employee.Email = model.Email;
+                return View(showEmployee);
 
-                employee.Salary = model.Salary;
+                //return await Task.Run(() => View("View", showEmployee));
 
-                employee.DateOfBirth = model.DateOfBirth;
+            }
 
-                employee.Department = model.Department;
+                return RedirectToAction("Index");
+            
+        }
+
+        public async Task<IActionResult> UpdateEmployeeAsync(UpdateEmployeeViewModel viewUpdate)
+        {
+            var employee = await _appDbContext.employees.FindAsync(viewUpdate.Id);
+
+            if(employee != null)
+            {
+
+                employee.Name = viewUpdate.Name;
+
+                employee.Email = viewUpdate.Email;
+
+                employee.Salary = viewUpdate.Salary;
+
+                employee.DateOfBirth = viewUpdate.DateOfBirth;
+
+                employee.Department = viewUpdate.Department;
 
                 await _appDbContext.SaveChangesAsync();
 
@@ -123,8 +188,16 @@ namespace CrudApplication.Controllers
 
             return RedirectToAction("Index");
 
+        } 
+
+        //Closing a view page
+        public IActionResult Close()
+        {
+            return RedirectToAction("Index");
         }
 
+
+        //Deleting details
         public async Task<IActionResult> Delete(UpdateEmployeeViewModel model)
         {
 
@@ -141,5 +214,6 @@ namespace CrudApplication.Controllers
 
             return RedirectToAction("Index");
         }
+
     }
 }
