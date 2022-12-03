@@ -105,9 +105,10 @@ namespace CrudApplication.Controllers
             return RedirectToAction("Index");
         }
 
-
+         //Formal method acting in place of Update for the form 
+         //Below the the Update method for the form that has been generated
         //[HttpPost]
-        //public IActionResult Update()
+        //public async Task<IActionResult> ViewAsync(UpdateViewModel model)
 
         //{
         //    var employee = await _appDbContext.employees.FindAsync(model.Id);
