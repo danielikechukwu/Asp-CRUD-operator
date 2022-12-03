@@ -107,6 +107,7 @@ namespace CrudApplication.Controllers
 
          //Formal method acting in place of Update for the form 
          //Below the the Update method for the form that has been generated
+         //
         //[HttpPost]
         //public async Task<IActionResult> ViewAsync(UpdateViewModel model)
 
