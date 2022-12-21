@@ -12,6 +12,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<CRUDAppDbContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("CRUDAppDatabase")));
 
+
+ 
 builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 
  

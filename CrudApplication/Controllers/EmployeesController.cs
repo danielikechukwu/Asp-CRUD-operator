@@ -7,13 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
+using System.Net.Http;
 
 namespace CrudApplication.Controllers
 {
-   
+
     public class EmployeesController : Controller
     {
-
+       
         //Injecting
         private readonly CRUDAppDbContext _appDbContext;
 
@@ -38,16 +39,11 @@ namespace CrudApplication.Controllers
             return View(employee);
         }
         //creating data
-        [HttpPost]        
+        [HttpPost]
         //[ValidateAntiForgeryToken]
         //[FromBody]
         public async Task<IActionResult> NewAdd(AddEmployeeViewModel employeeViewModel)
         {
-
-            /* if (ModelState.IsValid)
-             {
-                 return BadRequest();
-             } */
 
             var employee = new Employee()
             {
@@ -77,7 +73,7 @@ namespace CrudApplication.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewAsync(Guid Id)
         {
-    
+
             var employee = await _appDbContext.employees.FirstOrDefaultAsync(x => x.Id == Id);
 
             if (employee != null)
@@ -96,7 +92,7 @@ namespace CrudApplication.Controllers
 
                 //return await Task.Run(() => View("View", viewModel ));
                 ///return RedirectToAction("Index");
-                
+
 
                 return View(viewModel);
 
@@ -105,9 +101,9 @@ namespace CrudApplication.Controllers
             return RedirectToAction("Index");
         }
 
-         //Formal method acting in place of Update for the form 
-         //Below the the Update method for the form that has been generated
-         //
+        //Formal method acting in place of Update for the form 
+        //Below the the Update method for the form that has been generated
+        //
         //[HttpPost]
         //public async Task<IActionResult> ViewAsync(UpdateViewModel model)
 
@@ -161,15 +157,15 @@ namespace CrudApplication.Controllers
 
             }
 
-                return RedirectToAction("Index");
-            
+            return RedirectToAction("Index");
+
         }
 
         public async Task<IActionResult> UpdateEmployeeAsync(UpdateEmployeeViewModel viewUpdate)
         {
             var employee = await _appDbContext.employees.FindAsync(viewUpdate.Id);
 
-            if(employee != null)
+            if (employee != null)
             {
 
                 employee.Name = viewUpdate.Name;
@@ -190,7 +186,7 @@ namespace CrudApplication.Controllers
 
             return RedirectToAction("Index");
 
-        } 
+        }
 
         //Closing a view page
         public IActionResult Close()
